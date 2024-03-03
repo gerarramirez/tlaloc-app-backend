@@ -1,7 +1,7 @@
 package main
 
 import (
-	"tlaloc-catalog/handlers"
+	handlers "tlaloc-catalog/handler"
 
 	"github.com/labstack/echo/v4"
 )
