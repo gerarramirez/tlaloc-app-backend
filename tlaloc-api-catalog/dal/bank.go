@@ -11,6 +11,10 @@ import (
 
 const uuidLength = 36
 
+type BankDAO interface {
+	Create(bank *model.Bank) (*model.BankEntity, error)
+}
+
 type Bank struct {
 	DB           *gorm.DB
 	GenerateUUID GenerateUUID
@@ -25,7 +29,7 @@ func NewBankDal(db *gorm.DB) *Bank {
 	}
 }
 
-func (b *Bank) Create(bank *model.BankJson) (*model.Bank, error) {
+func (b *Bank) Create(bank *model.Bank) (*model.BankEntity, error) {
 	if bank == nil {
 		return nil, errors.New("Bank can not be nil")
 	}
@@ -33,13 +37,13 @@ func (b *Bank) Create(bank *model.BankJson) (*model.Bank, error) {
 	println("esta es lo que trae " + bank.Name)
 	now := time.Now()
 
-	e := &model.Bank{
+	e := &model.BankEntity{
 		BaseEntity: model.BaseEntity{
 			ID:        b.GenerateUUID(),
 			CreatedAt: now,
 			UpdatedAt: now,
 		},
-		BankJson: model.BankJson{
+		Bank: model.Bank{
 			Name: bank.Name,
 		},
 	}

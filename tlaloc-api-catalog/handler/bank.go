@@ -11,14 +11,14 @@ func Home(c echo.Context) error {
 	return c.String(http.StatusOK, "Hello World!")
 }
 
-func (bankDao *Handler) Create(c echo.Context) error {
-	u := new(model.BankJson)
+func (bank *Handler) Create(c echo.Context) error {
+	u := new(model.Bank)
 
 	if err := c.Bind(u); err != nil {
 		return c.JSON(http.StatusInternalServerError, "Errorazo papa")
 	}
 
-	a, err := bankDao.bankDal.Create(u)
+	a, err := bank.bankDAO.Create(u)
 
 	if err != nil {
 		return c.String(http.StatusOK, "Hello World!")

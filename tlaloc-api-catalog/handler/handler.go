@@ -1,13 +1,13 @@
 package handler
 
 import (
-	"tlaloc-catalog/bank"
+	"tlaloc-catalog/dal"
 )
 
 type Handler struct {
-	bankDal bank.Bank_dal
+	bankDAO dal.BankDAO
 }
 
-func NewHandler(bank bank.Bank_dal) *Handler {
-	return &Handler{bankDal: bank}
+func NewHandler(bank dal.BankDAO) *Handler {
+	return &Handler{bankDAO: bank}
 }
