@@ -1,10 +1,10 @@
 package model
 
-type Bank struct {
+type BankJson struct {
 	Name string `json:"name"`
 }
 
-type BankEntity struct {
+type Bank struct {
 	BaseEntity
-	Bank
+	BankJson
 }
