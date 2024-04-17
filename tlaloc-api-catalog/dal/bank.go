@@ -13,6 +13,7 @@ const uuidLength = 36
 
 type BankDAO interface {
 	Create(bank *model.Bank) (*model.BankEntity, error)
+	FindAll() ([]model.Bank, error)
 }
 
 type Bank struct {
@@ -59,4 +60,16 @@ func (b *Bank) Create(bank *model.Bank) (*model.BankEntity, error) {
 
 	return e, nil
 
+}
+
+func (b *Bank) FindAll() ([]model.Bank, error) {
+	var (
+		banks []model.Bank
+	)
+
+	if err := b.DB.Table("tlaloc_api.banks").Find(&banks).Error; err != nil {
+		return nil, err
+	}
+
+	return banks, nil
 }

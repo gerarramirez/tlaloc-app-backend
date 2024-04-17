@@ -20,5 +20,6 @@ func main() {
 	b := dal.NewBankDal(db)
 	h := handler.NewHandler(b)
 	e.POST("/create", h.Create)
+	e.GET("/findAll", h.FindAll)
 	e.Logger.Fatal(e.Start(":1323"))
 }
