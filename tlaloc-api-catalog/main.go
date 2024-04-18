@@ -21,5 +21,6 @@ func main() {
 	h := handler.NewHandler(b)
 	e.POST("/create", h.Create)
 	e.GET("/findAll", h.FindAll)
+	e.POST("/update", h.Update)
 	e.Logger.Fatal(e.Start(":1323"))
 }

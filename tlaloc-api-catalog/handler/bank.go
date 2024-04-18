@@ -30,3 +30,17 @@ func (bank *Handler) FindAll(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, b)
 }
+
+func (bank *Handler) Update(c echo.Context) error {
+	u := new(model.BankEntity)
+	if err := c.Bind(u); err != nil {
+		println("Error parseando el JSON")
+		return err
+	}
+	if err := bank.bankDAO.Update(u); err != nil {
+		println("Erro actualizando el dato")
+		return err
+	}
+
+	return c.JSON(http.StatusOK, "Registro Actualizado de forma correcta")
+}
