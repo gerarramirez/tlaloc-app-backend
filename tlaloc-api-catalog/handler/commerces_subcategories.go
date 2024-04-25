@@ -14,7 +14,7 @@ func (handler *Handler) CreateCommercesSubcategories(e echo.Context) error {
 		return e.JSON(http.StatusInternalServerError, "error in PARSE")
 	}
 
-	if _, error := handler.commercesSubcategoriesDAO.Create(c); error != nil {
+	if error := handler.commercesSubcategoriesDAO.Create(c); error != nil {
 		println("error in create subcategories commerces")
 		e.JSON(http.StatusInternalServerError, "error in subcategories commerces")
 	}
@@ -40,7 +40,7 @@ func (handler *Handler) UpdateCommercesSubcategories(e echo.Context) error {
 		return e.JSON(http.StatusInternalServerError, "Wrong parses in JSON")
 	}
 
-	if _, error := handler.commercesSubcategoriesDAO.Update(cs); error != nil {
+	if error := handler.commercesSubcategoriesDAO.Update(cs); error != nil {
 		e.JSON(http.StatusInternalServerError, "Wrong in save update")
 	}
 

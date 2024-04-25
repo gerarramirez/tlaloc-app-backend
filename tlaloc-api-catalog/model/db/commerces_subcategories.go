@@ -7,6 +7,6 @@ type CommercesSubcategories struct {
 }
 
 type CommercesSubcategoriesEntity struct {
-	CommercesCategories
+	CommercesSubcategories
 	BaseEntity
 }

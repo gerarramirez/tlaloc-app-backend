@@ -14,7 +14,7 @@ func (handler *Handler) CreateBanksProduct(e echo.Context) error {
 		return e.JSON(http.StatusInternalServerError, "Json con mal formación")
 	}
 
-	if _, error := handler.banksProductsDAO.Create(p); error != nil {
+	if error := handler.banksProductsDAO.Create(p); error != nil {
 		return e.JSON(http.StatusInternalServerError, "error")
 	}
 
@@ -39,7 +39,7 @@ func (handler *Handler) UpdateBanksProducts(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, "Error en el paeseo del JSON")
 	}
 
-	if _, error := handler.banksProductsDAO.Update(bp); error != nil {
+	if error := handler.banksProductsDAO.Update(bp); error != nil {
 		return c.JSON(http.StatusInternalServerError, "error en el servidor")
 
 	}

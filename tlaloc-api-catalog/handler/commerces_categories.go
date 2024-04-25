@@ -15,7 +15,7 @@ func (handler *Handler) CreateCommercesCategories(e echo.Context) error {
 		return e.JSON(http.StatusInternalServerError, "error en el parseo del modelo")
 	}
 
-	if _, error := handler.commercesCategoriesDAO.Create(ct); error != nil {
+	if error := handler.commercesCategoriesDAO.Create(ct); error != nil {
 		println("error en la creacion de categorias de comercio")
 		return e.JSON(http.StatusInternalServerError, "error en la creacion de las categorias de comercio")
 	}
@@ -43,7 +43,7 @@ func (handler *Handler) UpdateCommercesCategories(e echo.Context) error {
 		println("error in parse JSON commerces categories")
 	}
 
-	if _, error := handler.commercesCategoriesDAO.Create(ct); error != nil {
+	if error := handler.commercesCategoriesDAO.Create(ct); error != nil {
 		println("error to create commerces categories")
 	}
 
