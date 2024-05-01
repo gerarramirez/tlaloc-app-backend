@@ -14,7 +14,7 @@ func (handler *Handler) CreateExpensesCategories(e echo.Context) error {
 		println("error in Parse json")
 		return e.JSON(http.StatusInternalServerError, "error in JSON parse")
 	}
-	if _, error := handler.expensesCategoriesDAO.Create(ep); error != nil {
+	if error := handler.expensesCategoriesDAO.Create(ep); error != nil {
 		println("error in storage to Expenses cactegories")
 
 	}
@@ -41,7 +41,7 @@ func (handler *Handler) UpdateExpensesCategories(e echo.Context) error {
 		return e.JSON(http.StatusInternalServerError, "error in JSON parse")
 	}
 
-	if _, error := handler.expensesCategoriesDAO.Update(ep); error != nil {
+	if error := handler.expensesCategoriesDAO.Update(ep); error != nil {
 		return e.JSON(http.StatusInternalServerError, "Internal server error")
 	}
 
