@@ -18,9 +18,13 @@ func main() {
 
 	e := echo.New()
 	b := dal.NewBankDal(db)
-	h := handler.NewHandler(b)
-	e.POST("/create", h.Create)
-	e.GET("/findAll", h.FindAll)
-	e.POST("/update", h.Update)
+	b2 := dal.NewBanksProducts(db)
+	h := handler.NewHandler(b, b2)
+	e.POST("/bank/create", h.Create)
+	e.GET("/bank/findAll", h.FindAll)
+	e.POST("/bank/update", h.Update)
+	e.POST("/bank-products/create", h.CreateBanksProduct)
+	e.GET("/bank-products/findAll", h.FindAllBanksProducts)
+	e.POST("/bank-products/update", h.UpdateBanksProducts)
 	e.Logger.Fatal(e.Start(":1323"))
 }

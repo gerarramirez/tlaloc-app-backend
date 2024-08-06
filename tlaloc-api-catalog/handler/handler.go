@@ -13,6 +13,9 @@ type Handler struct {
 	expensesCategoriesDAO     dal.ExpensesCategoriesDAO
 }
 
-func NewHandler(bank dal.BankDAO) *Handler {
-	return &Handler{bankDAO: bank}
+func NewHandler(bank dal.BankDAO, bankProducts dal.BanksProductDao) *Handler {
+	return &Handler{
+		bankDAO:          bank,
+		banksProductsDAO: bankProducts,
+	}
 }
