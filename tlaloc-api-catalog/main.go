@@ -19,7 +19,28 @@ func main() {
 	e := echo.New()
 	b := dal.NewBankDal(db)
 	b2 := dal.NewBanksProducts(db)
-	h := handler.NewHandler(b, b2)
+	cc := dal.NewCommercesCategories(db)
+	cs := dal.NewCommercesSubcategories(db)
+	c := dal.NewCommercesDal(db)
+	ec := dal.NewExpensesCategories(db)
+	h := handler.NewHandler(b, b2, cc, cs, c, ec)
+
+	e.POST("/expenses-categories/create", h.CreateExpensesCategories)
+	e.POST("/expenses-categories/update", h.UpdateExpensesCategories)
+	e.GET("/expenses-categories/findAll", h.FindAllExpensesCategories)
+
+	e.POST("/commerce-categories/create", h.CreateCommercesCategories)
+	e.POST("/commerce-categories/update", h.UpdateCommercesCategories)
+	e.GET("/commerce-categories/findAll", h.FindAllCommercesCategories)
+
+	e.POST("/commerce-subcategories/create", h.CreateCommercesSubcategories)
+	e.POST("/commerce-subcategories/update", h.UpdateCommercesSubcategories)
+	e.GET("/commerce-subcategories/findAll", h.FindAllCommercesSubcategories)
+
+	e.POST("/commerces/create", h.CreateCommerce)
+	e.POST("/commerces/update", h.UpdateCommerces)
+	e.GET("/commerces/findAll", h.FindAllCommerces)
+
 	e.POST("/bank/create", h.Create)
 	e.GET("/bank/findAll", h.FindAll)
 	e.POST("/bank/update", h.Update)

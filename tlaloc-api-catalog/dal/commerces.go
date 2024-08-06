@@ -48,14 +48,12 @@ func (comm *Commerces) Create(commerces *model.Commerces) (*model.Commerces, err
 	}
 
 	db := comm.DB.Begin()
-	if err := db.Table("").Create(&c).Error; err != nil {
+	if err := db.Table("tlaloc_api.commerces").Create(&c).Error; err != nil {
 		db.Rollback()
 		return nil, err
 	}
 
 	db.Commit()
-
-	commerces.Id = c.BaseEntity.ID
 
 	return commerces, nil
 
@@ -67,7 +65,7 @@ func (comm *Commerces) FindAll() ([]model.Commerces, error) {
 		commerces []model.Commerces
 	)
 
-	if error := comm.DB.Table("").Find(&commerces).Error; error != nil {
+	if error := comm.DB.Table("tlaloc_api.commerces").Find(&commerces).Error; error != nil {
 		return nil, errors.New("error en la extraccion de los commercios")
 	}
 
@@ -80,7 +78,7 @@ func (comm *Commerces) Update(c *model.Commerces) (*model.Commerces, error) {
 	}
 
 	db := comm.DB.Begin()
-	if err := db.Table("").Save(c).Error; err != nil {
+	if err := db.Table("tlaloc_api.commerces").Save(c).Error; err != nil {
 		return nil, errors.New("error en el actaulizado de comercios")
 	}
 

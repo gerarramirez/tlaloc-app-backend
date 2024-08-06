@@ -47,7 +47,7 @@ func (cs *CommercesSubcategories) Create(commercesSubcategories *model.Commerces
 
 	db := cs.DB.Begin()
 
-	if err := db.Table("").Create(c).Error; err != nil {
+	if err := db.Table("tlaloc_api.commerces_subcategories").Create(c).Error; err != nil {
 		db.Rollback()
 		return errors.New("error en el guardo de la persistencia")
 	}
@@ -59,7 +59,7 @@ func (CommercesSubCategoriesDao *CommercesSubcategories) FindAll() ([]model.Comm
 
 	var commercesSubcategories []model.CommercesSubcategories
 
-	if err := CommercesSubCategoriesDao.DB.Table("").Find(&commercesSubcategories).Error; err != nil {
+	if err := CommercesSubCategoriesDao.DB.Table("tlaloc_api.commerces_subcategories").Find(&commercesSubcategories).Error; err != nil {
 		return nil, errors.New("error en el modelo")
 
 	}
@@ -75,7 +75,6 @@ func (CommercesSubcategoriesDAO *CommercesSubcategories) Update(commercesSubcate
 
 	cs := &model.CommercesSubcategoriesEntity{
 		CommercesSubcategories: model.CommercesSubcategories{
-			Id:                    commercesSubcategories.Id,
 			Name:                  commercesSubcategories.Name,
 			IdCommercesCategories: commercesSubcategories.IdCommercesCategories,
 		},
@@ -86,7 +85,7 @@ func (CommercesSubcategoriesDAO *CommercesSubcategories) Update(commercesSubcate
 
 	db := CommercesSubcategoriesDAO.DB.Begin()
 
-	if err := db.Table("").Save(&cs).Error; err != nil {
+	if err := db.Table("tlaloc_api.commerces_subcategories").Save(&cs).Error; err != nil {
 		db.Rollback()
 		return errors.New("error en el guardado")
 	}
