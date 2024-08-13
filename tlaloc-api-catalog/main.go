@@ -23,7 +23,12 @@ func main() {
 	cs := dal.NewCommercesSubcategories(db)
 	c := dal.NewCommercesDal(db)
 	ec := dal.NewExpensesCategories(db)
-	h := handler.NewHandler(b, b2, cc, cs, c, ec)
+	exp := dal.NewExpensesDal(db)
+	h := handler.NewHandler(b, b2, cc, cs, c, ec, exp)
+
+	e.POST("/expenses/create", h.CreateExpenses)
+	e.POST("/expenses/update", h.UpdateExpenses)
+	e.GET("/expenses/findAll", h.FindAllExpenses)
 
 	e.POST("/expenses-categories/create", h.CreateExpensesCategories)
 	e.POST("/expenses-categories/update", h.UpdateExpensesCategories)
