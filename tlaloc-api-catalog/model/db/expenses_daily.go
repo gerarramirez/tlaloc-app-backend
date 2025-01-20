@@ -3,13 +3,13 @@ package model
 import "time"
 
 type ExpensesDaily struct {
-	Name string `json: "name"`
-	//IdCategoriesExpenses     string    `json: "idCategoriesExpeses"`
-	amount                   float32   `json:"amount"`
-	idCommerce               string    `json:id_commerce`
-	expensesDate             time.Time `json:expenses_date`
-	transactionByBankProduct string    `json:id_bank_prodcut`
-	cash                     bool      `json:"cash"`
+	Name                       string    `json:"name"`
+	Amount                     float32   `json:"amount"`
+	IdBudgetExpensesCategories string    `json:"id_fk_budget_expenses_categories"`
+	IdCommerce                 string    `json:"id_commerce""`
+	ExpensesDate               time.Time `json:"expenses_date"`
+	IdBankProduct              string    `json:"id_bank_product""`
+	Cash                       bool      `json:"cash"`
 }
 
 type ExpensesEntity struct {
