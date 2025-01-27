@@ -36,8 +36,13 @@ func (b *BanksProducts) Create(bankProducts *model.BanksProducts) error {
 
 	bpEntity := &model.BanksProductsEntity{
 		BanksProducts: model.BanksProducts{
-			Name:   bankProducts.Name,
-			IdBank: bankProducts.IdBank,
+			Name:         bankProducts.Name,
+			IdBank:       bankProducts.IdBank,
+			Amount:       bankProducts.Amount,
+			Card:         bankProducts.Card,
+			Account:      bankProducts.Account,
+			Loan:         bankProducts.Loan,
+			InterestRate: bankProducts.InterestRate,
 		},
 		BaseEntity: model.BaseEntity{
 			ID:        b.GenerateUUID(),
@@ -70,9 +75,26 @@ func (banksProducts *BanksProducts) Update(bProducts *model.BanksProducts) error
 	if bProducts == nil {
 		return errors.New("Bank Products is empty")
 	}
+
+	/*	banksProductsEn := &model.BanksProductsEntity{
+			BaseEntity: model.BaseEntity{
+				ID:        bProducts.Id,
+				CreatedAt: time.Now(),
+			},
+			BanksProducts: model.BanksProducts{
+				Name:         bProducts.Name,
+				IdBank:       bProducts.IdBank,
+				Amount:       bProducts.Amount,
+				Card:         bProducts.Card,
+				Account:      bProducts.Account,
+				Loan:         bProducts.Loan,
+				InterestRate: bProducts.InterestRate,
+			},
+		}
+	*/
 	db := banksProducts.DB.Begin()
 
-	if err := db.Table("tlaloc_api.banks_products").Save(&banksProducts).Error; err != nil {
+	if err := db.Table("tlaloc_api.banks_products").Save(&bProducts).Error; err != nil {
 		db.Rollback()
 		return errors.New("Bank products doest updating")
 	}
