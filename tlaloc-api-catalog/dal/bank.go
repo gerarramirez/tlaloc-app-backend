@@ -11,6 +11,12 @@ import (
 
 const uuidLength = 36
 
+type BankDAO interface {
+	Create(bank *model.Bank) (*model.BankEntity, error)
+	FindAll() ([]model.Bank, error)
+	Update(ba *model.BankEntity) error
+}
+
 type Bank struct {
 	DB           *gorm.DB
 	GenerateUUID GenerateUUID
@@ -25,7 +31,7 @@ func NewBankDal(db *gorm.DB) *Bank {
 	}
 }
 
-func (b *Bank) Create(bank *model.BankJson) (*model.Bank, error) {
+func (b *Bank) Create(bank *model.Bank) (*model.BankEntity, error) {
 	if bank == nil {
 		return nil, errors.New("Bank can not be nil")
 	}
@@ -33,13 +39,13 @@ func (b *Bank) Create(bank *model.BankJson) (*model.Bank, error) {
 	println("esta es lo que trae " + bank.Name)
 	now := time.Now()
 
-	e := &model.Bank{
+	e := &model.BankEntity{
 		BaseEntity: model.BaseEntity{
 			ID:        b.GenerateUUID(),
 			CreatedAt: now,
 			UpdatedAt: now,
 		},
-		BankJson: model.BankJson{
+		Bank: model.Bank{
 			Name: bank.Name,
 		},
 	}
@@ -55,4 +61,26 @@ func (b *Bank) Create(bank *model.BankJson) (*model.Bank, error) {
 
 	return e, nil
 
+}
+
+func (b *Bank) FindAll() ([]model.Bank, error) {
+	var (
+		banks []model.Bank
+	)
+
+	if err := b.DB.Table("tlaloc_api.banks").Find(&banks).Error; err != nil {
+		return nil, err
+	}
+
+	return banks, nil
+}
+
+func (b *Bank) Update(ba *model.BankEntity) error {
+	db := b.DB.Begin()
+	if err := db.Table("tlaloc_api.banks").Save(&ba).Error; err != nil {
+		db.Rollback()
+		return err
+	}
+
+	return db.Commit().Error
 }
