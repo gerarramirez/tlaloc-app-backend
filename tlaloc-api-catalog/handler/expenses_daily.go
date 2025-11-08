@@ -8,7 +8,7 @@ import (
 )
 
 func (exp *Handler) CreateExpenses(c echo.Context) error {
-	u := new(model.ExpensesDaily)
+	u := new(model.DailyExpenses)
 	if err := c.Bind(u); err != nil {
 		return errors.New("Errorazo papa")
 	}
@@ -33,7 +33,7 @@ func (exp *Handler) FindAllExpenses(c echo.Context) error {
 }
 
 func (exp *Handler) UpdateExpenses(c echo.Context) error {
-	expensesModel := new(model.ExpensesDaily)
+	expensesModel := new(model.DailyExpenses)
 
 	if err := c.Bind(expensesModel); err != nil {
 		errors.New("Error parsing JSON from FrontEnd")

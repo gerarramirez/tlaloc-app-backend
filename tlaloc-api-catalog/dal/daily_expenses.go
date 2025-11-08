@@ -2,16 +2,14 @@ package dal
 
 import (
 	"errors"
-	"github.com/google/uuid"
 	"gorm.io/gorm"
-	"time"
 	model "tlaloc-catalog/model/db"
 )
 
 type ExpensesDao interface {
-	Create(expense *model.ExpensesDaily) error
-	FindAll() (*[]model.ExpensesDaily, error)
-	Update(expenses *model.ExpensesDaily) error
+	Create(expense *model.DailyExpenses) error
+	FindAll() (*[]model.DailyExpenses, error)
+	Update(expenses *model.DailyExpenses) error
 }
 
 type Expenses struct {
@@ -22,27 +20,15 @@ type Expenses struct {
 func NewExpensesDal(db *gorm.DB) *Expenses {
 	return &Expenses{
 		DB: db,
-		Uuid: func() string {
-			return uuid.NewString()
-		},
 	}
 }
 
-func (expenses *Expenses) Create(exp *model.ExpensesDaily) error {
+func (expenses *Expenses) Create(exp *model.DailyExpenses) error {
 	if exp == nil {
 		return errors.New("modelo de expenses vacio")
 	}
 
-	model := &model.ExpensesEntity{
-		ExpensesDaily: model.ExpensesDaily{
-			Name: exp.Name,
-		},
-		BaseEntity: model.BaseEntity{
-			ID:        expenses.Uuid(),
-			CreatedAt: time.Now(),
-			UpdatedAt: time.Now(),
-		},
-	}
+	model := exp
 
 	db := expenses.DB.Begin()
 
@@ -54,8 +40,8 @@ func (expenses *Expenses) Create(exp *model.ExpensesDaily) error {
 	return db.Commit().Error
 }
 
-func (expenses *Expenses) FindAll() (*[]model.ExpensesDaily, error) {
-	var result *[]model.ExpensesDaily
+func (expenses *Expenses) FindAll() (*[]model.DailyExpenses, error) {
+	var result *[]model.DailyExpenses
 
 	if err := expenses.DB.Table("").Find(&result).Error; err != nil {
 		return nil, errors.New("Error getting expenses")
@@ -63,7 +49,7 @@ func (expenses *Expenses) FindAll() (*[]model.ExpensesDaily, error) {
 	return result, nil
 }
 
-func (expenses *Expenses) Update(exp *model.ExpensesDaily) error {
+func (expenses *Expenses) Update(exp *model.DailyExpenses) error {
 	if exp == nil {
 		errors.New("Error updating to expeses")
 	}

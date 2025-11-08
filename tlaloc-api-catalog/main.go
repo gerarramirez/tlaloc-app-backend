@@ -24,7 +24,8 @@ func main() {
 	c := dal.NewCommercesDal(db)
 	ec := dal.NewExpensesCategories(db)
 	exp := dal.NewExpensesDal(db)
-	h := handler.NewHandler(b, b2, cc, cs, c, ec, exp)
+	it := dal.NewDalIncomeType(db)
+	h := handler.NewHandler(b, b2, cc, cs, c, ec, exp, it)
 
 	e.POST("/expenses/create", h.CreateExpenses)
 	e.POST("/expenses/update", h.UpdateExpenses)
@@ -52,5 +53,10 @@ func main() {
 	e.POST("/bank-products/create", h.CreateBanksProduct)
 	e.GET("/bank-products/findAll", h.FindAllBanksProducts)
 	e.POST("/bank-products/update", h.UpdateBanksProducts)
+
+	e.POST("/income-types/create", h.CreateIncomeTypes)
+	e.POST("/income-types/update", h.UpdateIncomeTypes)
+	e.GET("/income-types/findAll", h.FindAllIncomeType)
+
 	e.Logger.Fatal(e.Start(":1323"))
 }

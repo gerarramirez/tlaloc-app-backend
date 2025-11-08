@@ -2,10 +2,8 @@ package dal
 
 import (
 	"errors"
-	"time"
 	model "tlaloc-catalog/model/db"
 
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -16,16 +14,12 @@ type CommercesSubcategoriesDAO interface {
 }
 
 type CommercesSubcategories struct {
-	DB           *gorm.DB
-	GenerateUUID GenerateUUID
+	DB *gorm.DB
 }
 
 func NewCommercesSubcategories(db *gorm.DB) *CommercesSubcategories {
 	return &CommercesSubcategories{
 		DB: db,
-		GenerateUUID: func() string {
-			return uuid.NewString()
-		},
 	}
 }
 
@@ -34,16 +28,7 @@ func (cs *CommercesSubcategories) Create(commercesSubcategories *model.Commerces
 		return errors.New("modelo vacio")
 	}
 
-	c := &model.CommercesSubcategoriesEntity{
-		CommercesSubcategories: model.CommercesSubcategories{
-			Name:                  commercesSubcategories.Name,
-			IdCommercesCategories: commercesSubcategories.IdCommercesCategories,
-		},
-		BaseEntity: model.BaseEntity{
-			ID:        cs.GenerateUUID(),
-			CreatedAt: time.Now(),
-		},
-	}
+	c := commercesSubcategories
 
 	db := cs.DB.Begin()
 
@@ -73,15 +58,7 @@ func (CommercesSubcategoriesDAO *CommercesSubcategories) Update(commercesSubcate
 		return errors.New("modelo vacio")
 	}
 
-	cs := &model.CommercesSubcategoriesEntity{
-		CommercesSubcategories: model.CommercesSubcategories{
-			Name:                  commercesSubcategories.Name,
-			IdCommercesCategories: commercesSubcategories.IdCommercesCategories,
-		},
-		BaseEntity: model.BaseEntity{
-			UpdatedAt: time.Now(),
-		},
-	}
+	cs := commercesSubcategories
 
 	db := CommercesSubcategoriesDAO.DB.Begin()
 

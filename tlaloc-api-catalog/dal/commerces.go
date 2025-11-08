@@ -2,10 +2,8 @@ package dal
 
 import (
 	"errors"
-	"time"
 	model "tlaloc-catalog/model/db"
 
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -16,14 +14,12 @@ type CommercesDAO interface {
 }
 
 type Commerces struct {
-	DB   *gorm.DB
-	uuid GenerateUUID
+	DB *gorm.DB
 }
 
 func NewCommercesDal(db *gorm.DB) *Commerces {
 	return &Commerces{
-		DB:   db,
-		uuid: func() string { return uuid.New().String() },
+		DB: db,
 	}
 }
 
@@ -33,19 +29,7 @@ func (comm *Commerces) Create(commerces *model.Commerces) (*model.Commerces, err
 		return nil, errors.New("modelo vacio")
 	}
 
-	now := time.Now()
-
-	c := &model.CommercesEntity{
-		Commerces: model.Commerces{
-			Name:                  commerces.Name,
-			IdCommercesCategories: commerces.IdCommercesCategories,
-		},
-		BaseEntity: model.BaseEntity{
-			ID:        comm.uuid(),
-			CreatedAt: now,
-			UpdatedAt: now,
-		},
-	}
+	c := commerces
 
 	db := comm.DB.Begin()
 	if err := db.Table("tlaloc_api.commerces").Create(&c).Error; err != nil {

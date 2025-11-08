@@ -12,9 +12,11 @@ type Handler struct {
 	commercesSubcategoriesDAO dal.CommercesSubcategoriesDAO
 	expensesCategoriesDAO     dal.ExpensesCategoriesDAO
 	expenses                  dal.ExpensesDao
+	incomeTypesDAO            dal.IncomeTypeDAO
 }
 
-func NewHandler(bank dal.BankDAO, bankProducts dal.BanksProductDao, commerceCategories dal.CommercesCategoriesDAO, commercesSubcategories dal.CommercesSubcategoriesDAO, commerces dal.CommercesDAO, expensesCategories dal.ExpensesCategoriesDAO, expenses dal.ExpensesDao) *Handler {
+func NewHandler(bank dal.BankDAO, bankProducts dal.BanksProductDao, commerceCategories dal.CommercesCategoriesDAO, commercesSubcategories dal.CommercesSubcategoriesDAO, commerces dal.CommercesDAO, expensesCategories dal.ExpensesCategoriesDAO, expenses dal.ExpensesDao,
+	incomeTypes dal.IncomeTypeDAO) *Handler {
 	return &Handler{
 		bankDAO:                   bank,
 		banksProductsDAO:          bankProducts,
@@ -23,5 +25,6 @@ func NewHandler(bank dal.BankDAO, bankProducts dal.BanksProductDao, commerceCate
 		commercesDAO:              commerces,
 		expensesCategoriesDAO:     expensesCategories,
 		expenses:                  expenses,
+		incomeTypesDAO:            incomeTypes,
 	}
 }
