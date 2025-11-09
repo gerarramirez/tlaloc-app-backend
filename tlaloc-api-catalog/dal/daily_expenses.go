@@ -13,8 +13,7 @@ type ExpensesDao interface {
 }
 
 type Expenses struct {
-	DB   *gorm.DB
-	Uuid GenerateUUID
+	DB *gorm.DB
 }
 
 func NewExpensesDal(db *gorm.DB) *Expenses {
