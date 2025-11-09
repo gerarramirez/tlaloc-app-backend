@@ -4,9 +4,6 @@ import (
 	"errors"
 	model "tlaloc-catalog/model/db"
 
-	"time"
-
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -17,14 +14,12 @@ type CommercesCategoriesDAO interface {
 }
 
 type CommercesCategories struct {
-	DB           *gorm.DB
-	GenerateUUID GenerateUUID
+	DB *gorm.DB
 }
 
 func NewCommercesCategories(db *gorm.DB) *CommercesCategories {
 	return &CommercesCategories{
-		DB:           db,
-		GenerateUUID: func() string { return uuid.NewString() },
+		DB: db,
 	}
 }
 
@@ -33,16 +28,7 @@ func (commercesDao CommercesCategories) Create(com *model.CommercesCategories) e
 		errors.New("error en el modelo de modelo de comercio")
 	}
 
-	c := &model.CommercesCategoriesEntity{
-		CommercesCategories: model.CommercesCategories{
-			Name: com.Name,
-		},
-		BaseEntity: model.BaseEntity{
-			ID:        commercesDao.GenerateUUID(),
-			CreatedAt: time.Now(),
-			UpdatedAt: time.Now(),
-		},
-	}
+	c := com
 
 	db := commercesDao.DB.Begin()
 	if err := db.Table("tlaloc_api.commerces_categories").Create(c).Error; err != nil {
@@ -70,12 +56,7 @@ func (commercesCategoriesDao CommercesCategories) Update(commercesCategories *mo
 		return errors.New("modelo vacio")
 	}
 
-	c := &model.CommercesCategoriesEntity{
-		CommercesCategories: *commercesCategories,
-		BaseEntity: model.BaseEntity{
-			UpdatedAt: time.Now(),
-		},
-	}
+	c := commercesCategories
 
 	db := commercesCategoriesDao.DB.Begin()
 
