@@ -31,7 +31,7 @@ func (expensesCategories *ExpensesCategories) Create(ec *model.ExpensesCategorie
 	e := ec
 
 	db := expensesCategories.DB.Begin()
-	if err := db.Table("tlaloc_api.expenses_categories").Create(e).Error; err != nil {
+	if err := db.Table("tlaloc_api.expense_categories").Select("name").Create(e).Error; err != nil {
 		db.Rollback()
 		return errors.New("creacion fallida")
 	}
@@ -43,7 +43,7 @@ func (expensesCategories *ExpensesCategories) Create(ec *model.ExpensesCategorie
 func (expensesCategories *ExpensesCategories) FindAll() ([]model.ExpensesCategories, error) {
 	var expensesCate []model.ExpensesCategories
 
-	if err := expensesCategories.DB.Table("tlaloc_api.expenses_categories").Find(&expensesCate).Error; err != nil {
+	if err := expensesCategories.DB.Table("tlaloc_api.expense_categories").Find(&expensesCate).Error; err != nil {
 		return nil, errors.New("error en la busqueda")
 	}
 
@@ -56,7 +56,7 @@ func (expensesCategories *ExpensesCategories) Update(ec *model.ExpensesCategorie
 	}
 
 	db := expensesCategories.DB.Begin()
-	if error := db.Table("tlaloc_api.expenses_categories").Save(ec).Error; error != nil {
+	if error := db.Table("tlaloc_api.expense_categories").Save(ec).Error; error != nil {
 		db.Rollback()
 		return errors.New("error actualizando")
 	}
