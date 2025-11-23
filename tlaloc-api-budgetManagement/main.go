@@ -35,7 +35,9 @@ func main() {
 	b := dal.NewBudgetDal(db)
 	budgetHandler := handler.NewHandler(b)
 
-	e.POST("/management-budger/create", budgetHandler.Create)
+	e.POST("/management-budget/create", budgetHandler.CreateBudget)
+	e.POST("/management-budget-expeses/categories/create", budgetHandler.CreateBudgetExpenseCate)
+	e.GET("/management-budget/wholebudget/:id", budgetHandler.GetWholeBudget)
 
 	e.Logger.Fatal(e.Start(":8080"))
 
