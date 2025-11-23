@@ -3,7 +3,7 @@ package dal
 import (
 	"errors"
 	"gorm.io/gorm"
-	"tlaloc-api-budgetManagement/model"
+	"tlaloc-api-budget/model"
 )
 
 type BudgetDao interface {

@@ -3,7 +3,7 @@ package handler
 import (
 	"github.com/labstack/echo/v4"
 	"net/http"
-	"tlaloc-api-budgetManagement/model"
+	"tlaloc-api-budget/model"
 )
 
 func (handler *Handler) CreateBudget(c echo.Context) error {
@@ -45,7 +45,7 @@ func (handler *Handler) GetWholeBudget(c echo.Context) error {
 	}
 
 	result, err := handler.budgetDao.GetWholeBudget(&id)
-	
+
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, "Error in the server")
 	}

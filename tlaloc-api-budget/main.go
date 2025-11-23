@@ -8,8 +8,8 @@ import (
 	"gorm.io/gorm"
 	"log"
 	"os"
-	"tlaloc-api-budgetManagement/dal"
-	"tlaloc-api-budgetManagement/handler"
+	"tlaloc-api-budget/dal"
+	"tlaloc-api-budget/handler"
 )
 
 func main() {

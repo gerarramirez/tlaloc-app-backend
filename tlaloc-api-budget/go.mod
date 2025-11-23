@@ -1,4 +1,4 @@
-module tlaloc-api-budgetManagement
+module tlaloc-api-budget
 
 go 1.21
 

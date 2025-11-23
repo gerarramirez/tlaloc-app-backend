@@ -1,3 +1,3 @@
-module tlaloc-app-backend
+module tlaloc-api-transaction
 
 go 1.21
