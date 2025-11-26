@@ -1,11 +1,7 @@
 package model
 
 type CommercesSubcategories struct {
-	Name                  string `json:"name"`
-	IdCommercesCategories string `json:"id_commerces_categories"`
-}
-
-type CommercesSubcategoriesEntity struct {
-	CommercesSubcategories
-	BaseEntity
+	Id                 string `json:"id"`
+	Name               string `json:"name"`
+	CommerceCategoryId string `json:"id_commerce_category"`
 }
