@@ -14,13 +14,13 @@ func (bank *Handler) Create(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, "Errorazo papa")
 	}
 
-	a, err := bank.bankDAO.Create(u)
+	err := bank.bankDAO.Create(u)
 
 	if err != nil {
 		return c.String(http.StatusOK, "Hello World!")
 	}
 
-	return c.JSON(http.StatusOK, "Hello World! "+a.ID)
+	return c.JSON(http.StatusOK, "Hello World! ")
 }
 
 func (bank *Handler) FindAll(c echo.Context) error {
@@ -32,7 +32,7 @@ func (bank *Handler) FindAll(c echo.Context) error {
 }
 
 func (bank *Handler) Update(c echo.Context) error {
-	u := new(model.BankEntity)
+	u := new(model.Bank)
 	if err := c.Bind(u); err != nil {
 		println("Error parseando el JSON")
 		return err

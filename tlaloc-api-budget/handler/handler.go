@@ -1,6 +1,6 @@
-package main
+package handler
 
-import "tlaloc-api-budgetManagement/dal"
+import "tlaloc-api-budget/dal"
 
 type Handler struct {
 	budgetDao dal.BudgetDao
