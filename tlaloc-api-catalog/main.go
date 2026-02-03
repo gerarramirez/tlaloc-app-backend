@@ -39,7 +39,8 @@ func main() {
 	exp := dal.NewExpensesDal(db)
 	it := dal.NewDalIncomeType(db)
 	pt := dal.NewProductTypesDAO(db)
-	h := handler.NewHandler(b, b2, cc, cs, c, ec, exp, it, pt)
+	ir := dal.NewInterestRate(db)
+	h := handler.NewHandler(b, b2, cc, cs, c, ec, exp, it, pt, ir)
 	RegisterRoutes(e, h)
 	e.Logger.Fatal(e.Start(":1323"))
 }

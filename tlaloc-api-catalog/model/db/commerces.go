@@ -1,7 +1,7 @@
 package model
 
 type Commerces struct {
-	Id                 string `json:"id"`
+	Id                 string `gorm:"primaryKey;default:null"json:"id"`
 	Name               string `json:"name"`
-	commerceCategoryId string `json:"id_commerce_category"`
+	CommerceCategoryId string `json:"commerce_category_id"`
 }

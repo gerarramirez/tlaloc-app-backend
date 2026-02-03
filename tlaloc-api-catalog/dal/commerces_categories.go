@@ -31,7 +31,7 @@ func (commercesDao CommercesCategories) Create(com *model.CommercesCategories) e
 	c := com
 
 	db := commercesDao.DB.Begin()
-	if err := db.Table("tlaloc_api.commerces_categories").Create(c).Error; err != nil {
+	if err := db.Select("name").Table("tlaloc_api.commerce_categories").Create(c).Error; err != nil {
 		db.Rollback()
 		return errors.New("error en el guardado de la tabla")
 	}
@@ -43,7 +43,7 @@ func (commercesCategoriesDao CommercesCategories) FindAll() ([]model.CommercesCa
 
 	var commercesCategories []model.CommercesCategories
 
-	if err := commercesCategoriesDao.DB.Table("tlaloc_api.commerces_categories").Find(&commercesCategories).Error; err != nil {
+	if err := commercesCategoriesDao.DB.Table("tlaloc_api.commerce_categories").Find(&commercesCategories).Error; err != nil {
 		return nil, errors.New("error en la extraccion de datos")
 	}
 
@@ -60,7 +60,7 @@ func (commercesCategoriesDao CommercesCategories) Update(commercesCategories *mo
 
 	db := commercesCategoriesDao.DB.Begin()
 
-	if err := db.Table("tlaloc_api.commerces_categories").Save(c).Error; err != nil {
+	if err := db.Select("name").Table("tlaloc_api.commerce_categories").Save(c).Error; err != nil {
 		db.Rollback()
 		print("error ")
 		return errors.New("no se pudo actualizar el registro")

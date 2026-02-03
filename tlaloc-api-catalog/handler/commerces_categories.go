@@ -10,42 +10,40 @@ import (
 func (handler *Handler) CreateCommercesCategories(e echo.Context) error {
 	ct := new(model.CommercesCategories)
 
-	if error := e.Bind(ct); error != nil {
-		println("error en el parseo de categorias")
-		return e.JSON(http.StatusInternalServerError, "error en el parseo del modelo")
+	// 1. Validar el binding
+	if err := e.Bind(ct); err != nil {
+		return e.JSON(http.StatusBadRequest, map[string]string{"error": "Formato de datos inválido"})
 	}
 
-	if error := handler.commercesCategoriesDAO.Create(ct); error != nil {
-		println("error en la creacion de categorias de comercio")
-		return e.JSON(http.StatusInternalServerError, "error en la creacion de las categorias de comercio")
+	// 2. Intentar crear en DB
+	if err := handler.commercesCategoriesDAO.Create(ct); err != nil {
+		return e.JSON(http.StatusInternalServerError, map[string]string{"error": "Error al crear la categoría"})
 	}
 
-	return e.JSON(http.StatusInternalServerError, "SUCCESS")
+	// 3. Retornar 201 Created
+	return e.JSON(http.StatusCreated, ct)
 }
 
 func (handler *Handler) FindAllCommercesCategories(e echo.Context) error {
-
-	result, error := handler.commercesCategoriesDAO.FindAll()
-
-	if error != nil {
-		println("error en la extraccion de categorias de commercios")
-		return e.JSON(http.StatusInternalServerError, "error en la extraccion de commercios")
+	result, err := handler.commercesCategoriesDAO.FindAll()
+	if err != nil {
+		return e.JSON(http.StatusInternalServerError, map[string]string{"error": "Error al obtener las categorías"})
 	}
 
 	return e.JSON(http.StatusOK, result)
-
 }
 
 func (handler *Handler) UpdateCommercesCategories(e echo.Context) error {
 	ct := new(model.CommercesCategories)
 
-	if error := e.Bind(ct); error != nil {
-		println("error in parse JSON commerces categories")
+	if err := e.Bind(ct); err != nil {
+		return e.JSON(http.StatusBadRequest, map[string]string{"error": "Error en el parseo de datos"})
 	}
 
-	if error := handler.commercesCategoriesDAO.Create(ct); error != nil {
-		println("error to create commerces categories")
+	// Cambiado a .Update (asegúrate que tu DAO tenga este método)
+	if err := handler.commercesCategoriesDAO.Update(ct); err != nil {
+		return e.JSON(http.StatusInternalServerError, map[string]string{"error": "Error al actualizar la categoría"})
 	}
 
-	return e.JSON(http.StatusOK, "SUCCESS")
+	return e.JSON(http.StatusOK, map[string]string{"message": "Categoría actualizada correctamente"})
 }

@@ -42,4 +42,8 @@ func RegisterRoutes(e *echo.Echo, h *handler.Handler) {
 	e.GET("/product-types/GetAll", h.GetAllProductType)
 	e.POST("/product-types/update", h.UpdateProductType)
 
+	e.POST("/interest-rate/create", h.CreateInterestRate)
+	e.GET("/interest-rate/findAll", h.FindAllInterestRates)
+	e.POST("/interest-rate/update", h.UpdateInterestRate)
+
 }

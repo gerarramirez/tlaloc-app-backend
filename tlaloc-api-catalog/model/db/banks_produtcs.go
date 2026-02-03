@@ -1,10 +1,10 @@
 package model
 
 type BanksProducts struct {
-	Id             string `json:"id"`
+	Id             string `gorm:"primaryKey;default:null" json:"id"`
 	Name           string `json:"name"`
-	AccountNumber  string `json:"account-number"`
-	IdBank         string `json:"id_bank"`
-	ProductType    string `json:"id_product_type"`
-	InterestRateId string `json:"interest_rate"`
+	AccountNumber  string `json:"account_number"`
+	BankId         string `json:"bank_id"`
+	ProductTypeId  string `json:"product_type_id"`
+	InterestRateId string `json:"interest_rate_id"`
 }

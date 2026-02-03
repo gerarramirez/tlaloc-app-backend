@@ -31,7 +31,7 @@ func (b *BanksProducts) Create(bankProducts *model.BanksProducts) error {
 	bpEntity := bankProducts
 
 	db := b.DB.Begin()
-	if err := db.Table("tlaloc_api.banks_products").Create(&bpEntity).Error; err != nil {
+	if err := db.Table("tlaloc_api.bank_products").Create(&bpEntity).Error; err != nil {
 		db.Rollback()
 		return errors.New("error en el guardado de la informacion de producto bancario")
 	}
@@ -43,7 +43,7 @@ func (bankProducts *BanksProducts) FindAll() ([]model.BanksProducts, error) {
 		result []model.BanksProducts
 	)
 
-	if err := bankProducts.DB.Table("tlaloc_api.banks_products").Find(&result).Error; err != nil {
+	if err := bankProducts.DB.Table("tlaloc_api.bank_products").Find(&result).Error; err != nil {
 		return nil, err
 	}
 
@@ -57,7 +57,7 @@ func (banksProducts *BanksProducts) Update(bProducts *model.BanksProducts) error
 
 	db := banksProducts.DB.Begin()
 
-	if err := db.Table("tlaloc_api.banks_products").Save(&bProducts).Error; err != nil {
+	if err := db.Table("tlaloc_api.bank_products").Save(&bProducts).Error; err != nil {
 		db.Rollback()
 		return errors.New("Bank products doest updating")
 	}

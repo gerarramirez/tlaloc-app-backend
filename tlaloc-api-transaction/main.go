@@ -8,6 +8,8 @@ import (
 	"gorm.io/gorm"
 	"log"
 	"os"
+	"tlaloc-api-transaction/dal"
+	"tlaloc-api-transaction/handler"
 )
 
 func main() {
@@ -24,12 +26,18 @@ func main() {
 		os.Getenv("DB_NAME"),
 		os.Getenv("DB_PORT"))
 
-	_, err = gorm.Open(postgres.Open(dns), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dns), &gorm.Config{})
 
 	if err != nil {
 		log.Fatal("Error in conn to database" + err.Error())
 	}
 	e := echo.New()
+
+	// dd dao dao; dh daily handler
+	dd := dal.NewDailyExpensesDao(db)
+	dh := handler.NewHandler(dd)
+
+	e.POST("/transaction/create", dh.CreateDailyExpenses)
 
 	e.Logger.Fatal(e.Start(":8081"))
 
