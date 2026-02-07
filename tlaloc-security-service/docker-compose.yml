@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  tlaloc-security-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - DB_HOST=postgres
+      - DB_USER=postgres
+      - DB_PASSWORD=admin123456
+      - DB_NAME=tlaloc_security
+      - DB_PORT=5432
+      - JWT_SECRET=your-super-secret-jwt-key-change-this-in-production-min-32-chars
+      - JWT_REFRESH_SECRET=your-super-secret-refresh-key-change-this-in-production-min-32-chars
+      - SERVER_PORT=8081
+    depends_on:
+      - postgres
+    networks:
+      - tlaloc-network
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin123456
+      - POSTGRES_DB=tlaloc_security
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - tlaloc-network
+
+volumes:
+  postgres_data:
+
+networks:
+  tlaloc-network:
+    driver: bridge
