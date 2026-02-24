@@ -1,15 +1,3 @@
-<<<<<<< Updated upstream:tlaloc-api-transaction/go.mod
-module tlaloc-api-daily-transactionTraker
-
-go 1.21
-
-require (
-	github.com/labstack/echo/v4 v4.11.4
-	gorm.io/driver/postgres v1.5.6
-	gorm.io/gorm v1.25.7
-    github.com/google/uuid v1.6.0 // indirect
-)
-=======
 module tlaloc-transaction-service
 
 go 1.24.0
@@ -22,6 +10,7 @@ require (
 )
 
 require (
+	github.com/golang-jwt/jwt/v5 v5.3.1 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
 	github.com/jackc/pgx/v5 v5.6.0 // indirect
@@ -39,4 +28,3 @@ require (
 	golang.org/x/sys v0.39.0 // indirect
 	golang.org/x/text v0.32.0 // indirect
 )
->>>>>>> Stashed changes:tlaloc-transaction-service/go.mod

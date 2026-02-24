@@ -10,6 +10,7 @@ import (
 	"os"
 	"tlaloc-budget-service/dal"
 	"tlaloc-budget-service/handler"
+	tokencheck "tlaloc-budget-service/pkg/tokencheck"
 )
 
 func main() {
@@ -32,6 +33,14 @@ func main() {
 	}
 
 	e := echo.New()
+
+	// Add authentication middleware
+	jwtSecret := os.Getenv("JWT_SECRET")
+	if jwtSecret == "" {
+		log.Fatal("JWT_SECRET environment variable is required")
+	}
+	e.Use(tokencheck.RequireAuth(jwtSecret))
+
 	b := dal.NewBudgetDal(db)
 	budgetHandler := handler.NewHandler(b)
 

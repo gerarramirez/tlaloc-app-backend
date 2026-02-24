@@ -10,6 +10,7 @@ import (
 	"os"
 	"tlaloc-transaction-service/dal"
 	"tlaloc-transaction-service/handler"
+	tokencheck "tlaloc-transaction-service/pkg/tokencheck"
 )
 
 func main() {
@@ -32,6 +33,13 @@ func main() {
 		log.Fatal("Error in conn to database" + err.Error())
 	}
 	e := echo.New()
+
+	// Add authentication middleware
+	jwtSecret := os.Getenv("JWT_SECRET")
+	if jwtSecret == "" {
+		log.Fatal("JWT_SECRET environment variable is required")
+	}
+	e.Use(tokencheck.RequireAuth(jwtSecret))
 
 	// dd dao dao; dh daily handler
 	dd := dal.NewDailyExpensesDao(db)

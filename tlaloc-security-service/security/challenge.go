@@ -1,13 +1,34 @@
 package security
 
 import (
+	"crypto/rand"
 	"crypto/sha256"
 	"crypto/subtle"
 	"encoding/hex"
 	"fmt"
-	"github.com/labstack/gommon/log"
+	"math/big"
 	"time"
+
+	"github.com/labstack/gommon/log"
 )
+
+const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+
+func GenerateRandomString(length int) (string, error) {
+	result := make([]byte, length)
+	for i := range result {
+		n, err := rand.Int(rand.Reader, big.NewInt(int64(len(charset))))
+		if err != nil {
+			return "", err
+		}
+		result[i] = charset[n.Int64()]
+	}
+	return string(result), nil
+}
+
+func GetCurrentTime() time.Time {
+	return time.Now()
+}
 
 // ChallengeResponse - Estructura para el challenge
 type ChallengeResponse struct {
