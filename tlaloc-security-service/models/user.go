@@ -21,7 +21,6 @@ type RefreshToken struct {
 	UserID    uint      `gorm:"index;not null" json:"user_id"`
 	Token     string    `gorm:"uniqueIndex;not null" json:"token"`
 	ExpiresAt time.Time `gorm:"not null" json:"expires_at"`
-	Revoked   bool      `gorm:"default:false" json:"revoked"`
 	IsActive  bool      `gorm:"default:true" json:"is_active"`
 }
 
@@ -35,4 +34,16 @@ type UserSession struct {
 	ExpiresAt  time.Time `gorm:"not null" json:"expires_at"`
 	LastActive time.Time `json:"last_active"`
 	Revoked    bool      `gorm:"default:false" json:"revoked"`
+}
+
+func (UserSession) TableName() string {
+	return `tlaloc_security_user.user_sessions`
+}
+
+func (User) TableName() string {
+	return `tlaloc_security_user.users`
+}
+
+func (RefreshToken) TableName() string {
+	return `tlaloc_security_user.refresh_tokens`
 }

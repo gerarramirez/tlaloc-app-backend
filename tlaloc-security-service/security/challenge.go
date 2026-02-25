@@ -8,8 +8,6 @@ import (
 	"fmt"
 	"math/big"
 	"time"
-
-	"github.com/labstack/gommon/log"
 )
 
 const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
@@ -65,20 +63,21 @@ func GenerateChallenge() (*ChallengeResponse, error) {
 
 // VerifyChallengeHash - Verifica el hash del challenge
 func VerifyChallengeHash(password, challenge, nonce, clientHash string, timestamp int64) (bool, error) {
-	// 1. Construir el string original: password + challenge + nonce + timestamp
+	fmt.Println(password)
 
-	log.Info("pwd" + password)
-	originalString := fmt.Sprintf("%s%s%s%d", password, challenge, nonce, timestamp)
+	passwordHash := sha256.Sum256([]byte(password))
+	passwordHashStr := hex.EncodeToString(passwordHash[:])
+	fmt.Println(passwordHashStr)
 
-	// 2. Primer hash: SHA256(password + challenge + nonce + timestamp)
+	originalString := fmt.Sprintf("%s%s%s%d", passwordHashStr, challenge, nonce, timestamp)
+
 	firstHash := sha256.Sum256([]byte(originalString))
 	firstHashStr := hex.EncodeToString(firstHash[:])
 
-	// 3. Segundo hash: SHA256(primer_hash) - Double hashing
 	secondHash := sha256.Sum256([]byte(firstHashStr))
 	expectedHash := hex.EncodeToString(secondHash[:])
+	fmt.Print(expectedHash)
 
-	// 4. Comparación constante en tiempo
 	return subtle.ConstantTimeCompare([]byte(clientHash), []byte(expectedHash)) == 1, nil
 }
 

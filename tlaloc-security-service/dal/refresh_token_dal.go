@@ -29,7 +29,7 @@ func (d *RefreshTokenDal) CreateRefreshToken(token *models.RefreshToken) error {
 
 func (d *RefreshTokenDal) FindByToken(tokenString string) (*models.RefreshToken, error) {
 	var token models.RefreshToken
-	if err := d.DB.Where("token = ? AND revoked = ?", tokenString, false).First(&token).Error; err != nil {
+	if err := d.DB.Where("token = ? AND is_active = ?", tokenString, true).First(&token).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.New("refresh token not found or revoked")
 		}
@@ -44,14 +44,14 @@ func (d *RefreshTokenDal) GetRefreshToken(tokenString string) (*models.RefreshTo
 
 func (d *RefreshTokenDal) FindByUserID(userID uint) ([]models.RefreshToken, error) {
 	var tokens []models.RefreshToken
-	if err := d.DB.Where("user_id = ? AND revoked = ?", userID, false).Find(&tokens).Error; err != nil {
+	if err := d.DB.Where("user_id = ? AND is_active = ?", userID, true).Find(&tokens).Error; err != nil {
 		return nil, err
 	}
 	return tokens, nil
 }
 
 func (d *RefreshTokenDal) Revoke(tokenString string) error {
-	result := d.DB.Model(&models.RefreshToken{}).Where("token = ?", tokenString).Update("revoked", true)
+	result := d.DB.Model(&models.RefreshToken{}).Where("token = ?", tokenString).Update("is_active", false)
 	if result.Error != nil {
 		return result.Error
 	}
@@ -62,7 +62,7 @@ func (d *RefreshTokenDal) Revoke(tokenString string) error {
 }
 
 func (d *RefreshTokenDal) RevokeAllUserTokens(userID uint) error {
-	result := d.DB.Model(&models.RefreshToken{}).Where("user_id = ?", userID).Update("revoked", true)
+	result := d.DB.Model(&models.RefreshToken{}).Where("user_id = ?", userID).Update("is_active", false)
 	return result.Error
 }
 

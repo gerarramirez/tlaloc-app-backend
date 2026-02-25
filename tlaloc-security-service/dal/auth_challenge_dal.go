@@ -33,6 +33,10 @@ type AuthChallenge struct {
 
 // CreateChallenge - Crea un nuevo challenge en la base de datos
 func (d *AuthChallengeDal) CreateChallenge(challenge *AuthChallenge) error {
+	err := d.db.Where("email = ?", challenge.Email).Delete(&AuthChallenge{}).Error
+	if err != nil {
+		return err
+	}
 	return d.db.Create(challenge).Error
 }
 
