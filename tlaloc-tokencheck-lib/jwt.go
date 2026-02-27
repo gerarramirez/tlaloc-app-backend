@@ -12,13 +12,9 @@ import (
 
 // Claims - Estructura de claims para tokens JWT
 type Claims struct {
-	UserID    uint   `json:"user_id"`
-	Email     string `json:"email"`
-	Role      string `json:"role"`
-	ExpiresAt int64  `json:"expires_at"`
-	IssuedAt  int64  `json:"issued_at"`
-	Issuer    string `json:"issuer"`
-	TokenType string `json:"token_type"`
+	UserID uint   `json:"user_id"`
+	Email  string `json:"email"`
+	Role   string `json:"role"`
 	jwt.RegisteredClaims
 }
 
@@ -84,13 +80,14 @@ func ValidateToken(config *JWTConfig) echo.MiddlewareFunc {
 				token := c.Get("test_token")
 				if token != nil {
 					testClaims := &Claims{
-						UserID:    config.TestUserID,
-						Email:     config.TestEmail,
-						Role:      config.TestRole,
-						ExpiresAt: time.Now().Add(24 * time.Hour).Unix(),
-						IssuedAt:  time.Now().Unix(),
-						Issuer:    "tlaloc-security-test",
-						TokenType: "access",
+						UserID: config.TestUserID,
+						Email:  config.TestEmail,
+						Role:   config.TestRole,
+						RegisteredClaims: jwt.RegisteredClaims{
+							ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
+							IssuedAt:  jwt.NewNumericDate(time.Now()),
+							Issuer:    "tlaloc-security-test",
+						},
 					}
 					c.Set("user_id", testClaims.UserID)
 					c.Set("email", testClaims.Email)
@@ -170,7 +167,7 @@ func ValidateToken(config *JWTConfig) echo.MiddlewareFunc {
 			}
 
 			// Validar expiración
-			if !config.SkipValidation && claims.ExpiresAt < time.Now().Unix() {
+			if !config.SkipValidation && claims.ExpiresAt != nil && claims.ExpiresAt.Unix() < time.Now().Unix() {
 				return respondError(c, http.StatusUnauthorized, "Token has expired", map[string]interface{}{
 					"error_type": "token_expired",
 				})
@@ -196,9 +193,8 @@ func ValidateToken(config *JWTConfig) echo.MiddlewareFunc {
 				UserID:    claims.UserID,
 				Email:     claims.Email,
 				Role:      claims.Role,
-				ExpiresIn: claims.ExpiresAt - time.Now().Unix(),
-				IssuedAt:  claims.IssuedAt,
-				TokenType: claims.TokenType,
+				ExpiresIn: claims.ExpiresAt.Unix() - time.Now().Unix(),
+				IssuedAt:  claims.IssuedAt.Unix(),
 				Issuer:    claims.Issuer,
 			}
 
@@ -243,13 +239,14 @@ func IsTestMode(c echo.Context) bool {
 // GenerateTestToken - Genera token de prueba para testing
 func GenerateTestToken(config *JWTConfig) (string, error) {
 	claims := &Claims{
-		UserID:    config.TestUserID,
-		Email:     config.TestEmail,
-		Role:      config.TestRole,
-		ExpiresAt: time.Now().Add(24 * time.Hour).Unix(),
-		IssuedAt:  time.Now().Unix(),
-		Issuer:    "tlaloc-security-test",
-		TokenType: "access",
+		UserID: config.TestUserID,
+		Email:  config.TestEmail,
+		Role:   config.TestRole,
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
+			IssuedAt:  jwt.NewNumericDate(time.Now()),
+			Issuer:    "tlaloc-security-test",
+		},
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
