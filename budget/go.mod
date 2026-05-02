@@ -1,4 +1,4 @@
-module tlaloc-budget-service
+module budget
 
 go 1.21
 

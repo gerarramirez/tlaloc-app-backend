@@ -1,4 +1,4 @@
-module tlaloc-catalog-service
+module catalog
 
 go 1.21.6
 

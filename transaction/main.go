@@ -20,17 +20,17 @@ func main() {
 		log.Fatal("Error loading config file " + err.Error())
 	}
 
-	dns := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
 		os.Getenv("DB_HOST"),
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_PASSWORD"),
 		os.Getenv("DB_NAME"),
 		os.Getenv("DB_PORT"))
 
-	db, err := gorm.Open(postgres.Open(dns), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	if err != nil {
-		log.Fatal("Error in conn to database" + err.Error())
+		log.Fatalf("Error in conn to database: %v", err)
 	}
 	e := echo.New()
 
@@ -41,11 +41,12 @@ func main() {
 	}
 	e.Use(tokencheck.RequireAuth(jwtSecret))
 
-	// dd dao dao; dh daily handler
-	dd := dal.NewDailyExpensesDao(db)
-	dh := handler.NewHandler(dd)
+	dailyExpensesRepo := dal.NewDailyExpensesDao(db)
+	transactionHandler := handler.NewHandler(dailyExpensesRepo)
 
-	e.POST("/transaction/create", dh.CreateDailyExpenses)
+	e.POST("/transactions", transactionHandler.CreateDailyExpense)
+	e.GET("/transactions", transactionHandler.GetDailyExpenses)
+	e.PUT("/transactions/:id", transactionHandler.UpdateDailyExpense)
 
 	e.Logger.Fatal(e.Start(":8081"))
 

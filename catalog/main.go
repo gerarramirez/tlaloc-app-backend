@@ -28,7 +28,7 @@ func main() {
 		os.Getenv("DB_PORT"))
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		println("error perro!!")
+		log.Fatalf("Failed to connect to database: %v", err)
 	}
 	e := echo.New()
 
@@ -39,17 +39,23 @@ func main() {
 	}
 	e.Use(tokencheck.RequireAuth(jwtSecret))
 
-	b := dal.NewBankDal(db)
-	b2 := dal.NewBanksProducts(db)
-	cc := dal.NewCommercesCategories(db)
-	cs := dal.NewCommercesSubcategories(db)
-	c := dal.NewCommercesDal(db)
-	ec := dal.NewExpensesCategories(db)
-	exp := dal.NewExpensesDal(db)
-	it := dal.NewDalIncomeType(db)
-	pt := dal.NewProductTypesDAO(db)
-	ir := dal.NewInterestRate(db)
-	h := handler.NewHandler(b, b2, cc, cs, c, ec, exp, it, pt, ir)
-	RegisterRoutes(e, h)
+	bankDal := dal.NewBankDal(db)
+	bankProductsDal := dal.NewBanksProducts(db)
+	commerceCategoriesDal := dal.NewCommercesCategories(db)
+	commerceSubcategoriesDal := dal.NewCommercesSubcategories(db)
+	commercesDal := dal.NewCommercesDal(db)
+	expensesCategoriesDal := dal.NewExpensesCategories(db)
+	expensesDal := dal.NewExpensesDal(db)
+	incomeTypesDal := dal.NewDalIncomeType(db)
+	productTypesDal := dal.NewProductTypesDAO(db)
+	interestRateDal := dal.NewInterestRate(db)
+	
+	catalogHandler := handler.NewHandler(
+		bankDal, bankProductsDal, commerceCategoriesDal, commerceSubcategoriesDal,
+		commercesDal, expensesCategoriesDal, expensesDal, incomeTypesDal,
+		productTypesDal, interestRateDal,
+	)
+	
+	RegisterRoutes(e, catalogHandler)
 	e.Logger.Fatal(e.Start(":1323"))
 }

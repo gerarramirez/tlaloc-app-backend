@@ -1,4 +1,4 @@
-module github.com/tlaloc-dev/tlaloc-tokencheck-lib
+module tokencheck
 
 go 1.24.0
 

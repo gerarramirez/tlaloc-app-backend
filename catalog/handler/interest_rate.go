@@ -8,7 +8,7 @@ import (
 )
 
 // CreateInterestRate maneja la creación de una nueva tasa de interés
-func (handler *Handler) CreateInterestRate(e echo.Context) error {
+func (h *Handler) CreateInterestRate(e echo.Context) error {
 	ir := new(model.InterestRate)
 
 	// 1. Validar el binding del JSON
@@ -17,7 +17,8 @@ func (handler *Handler) CreateInterestRate(e echo.Context) error {
 	}
 
 	// 2. Persistir en la base de datos
-	if err := handler.interestRateDao.Create(ir); err != nil {
+	if err := h.interestRateDao.Create(ir); err != nil {
+		e.Logger().Errorf("Error al guardar la tasa de interés: %v", err)
 		return e.JSON(http.StatusInternalServerError, map[string]string{"error": "Error al guardar la tasa de interés"})
 	}
 
@@ -26,9 +27,10 @@ func (handler *Handler) CreateInterestRate(e echo.Context) error {
 }
 
 // FindAllInterestRates obtiene todas las tasas registradas
-func (handler *Handler) FindAllInterestRates(e echo.Context) error {
-	result, err := handler.interestRateDao.FindAll()
+func (h *Handler) FindAllInterestRates(e echo.Context) error {
+	result, err := h.interestRateDao.FindAll()
 	if err != nil {
+		e.Logger().Errorf("Error al obtener las tasas de interés: %v", err)
 		return e.JSON(http.StatusInternalServerError, map[string]string{"error": "Error al obtener las tasas de interés"})
 	}
 
@@ -36,7 +38,7 @@ func (handler *Handler) FindAllInterestRates(e echo.Context) error {
 }
 
 // UpdateInterestRate actualiza una tasa existente
-func (handler *Handler) UpdateInterestRate(e echo.Context) error {
+func (h *Handler) UpdateInterestRate(e echo.Context) error {
 	ir := new(model.InterestRate)
 
 	if err := e.Bind(ir); err != nil {
@@ -44,7 +46,8 @@ func (handler *Handler) UpdateInterestRate(e echo.Context) error {
 	}
 
 	// Usamos el método Update del DAO
-	if err := handler.interestRateDao.Update(ir); err != nil {
+	if err := h.interestRateDao.Update(ir); err != nil {
+		e.Logger().Errorf("Error al actualizar la tasa de interés: %v", err)
 		return e.JSON(http.StatusInternalServerError, map[string]string{"error": "Error al actualizar la tasa de interés"})
 	}
 

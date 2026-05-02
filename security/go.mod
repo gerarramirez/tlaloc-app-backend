@@ -1,4 +1,4 @@
-module tlaloc-security-service
+module security
 
 go 1.25.1
 

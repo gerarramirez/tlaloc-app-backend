@@ -20,16 +20,16 @@ func main() {
 		log.Fatal("Error loading configuration file" + err.Error())
 	}
 
-	dns := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
 		os.Getenv("DB_HOST"),
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_PASSWORD"),
 		os.Getenv("DB_NAME"),
 		os.Getenv("DB_PORT"))
-	db, err := gorm.Open(postgres.Open(dns), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	if err != nil {
-		println("Error en la connection")
+		log.Fatalf("Failed to connect to database: %v", err)
 	}
 
 	e := echo.New()
@@ -41,12 +41,12 @@ func main() {
 	}
 	e.Use(tokencheck.RequireAuth(jwtSecret))
 
-	b := dal.NewBudgetDal(db)
-	budgetHandler := handler.NewHandler(b)
+	budgetRepo := dal.NewBudgetDal(db)
+	budgetHandler := handler.NewHandler(budgetRepo)
 
-	e.POST("/management-budget/create", budgetHandler.CreateBudget)
-	e.POST("/management-budget-expeses/categories/create", budgetHandler.CreateBudgetExpenseCate)
-	e.GET("/management-budget/wholebudget/:id", budgetHandler.GetWholeBudget)
+	e.POST("/budgets", budgetHandler.CreateBudget)
+	e.POST("/budgets/expense-categories", budgetHandler.CreateBudgetExpenseCategory)
+	e.GET("/budgets/:id", budgetHandler.GetBudget)
 
 	e.Logger.Fatal(e.Start(":8080"))
 
